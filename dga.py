@@ -2,7 +2,7 @@
 
 from requests import get as http_get
 from random import choice
-import hashlib
+from hashlib import sha256
 
 
 def get_default_word_list():
@@ -13,7 +13,7 @@ def get_default_word_list():
 
 def get_word_list(url, expected_hash, minimum_word_length=4):
     text = http_get(url).text
-    hashed = hashlib.sha256(text).hexdigest()
+    hashed = sha256(text).hexdigest()
 
     assert hashed == expected_hash, "Unexpected hash: " + hashed + "\nResponse Text Truncated:\n" + text[:100]
 
