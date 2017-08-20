@@ -6,7 +6,7 @@ import hashlib
 
 
 def get_default_word_list():
-    url = "https://raw.githubusercontent.com/paritytech/wordlist/master/res/wordlist.txt"
+    url = "https://raw.githubusercontent.com/jhorowitz/domain-name-generation/master/wordlist.txt"
     expected_hash = "6d557f0693958fb5e650b68b5bee585eb82cf4da32965505c789e924743bc522"
     return get_word_list(url, expected_hash)
 
