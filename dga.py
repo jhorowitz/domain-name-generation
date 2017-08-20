@@ -28,6 +28,23 @@ def generate_domains(word_list, tld, domain_count, words_per_domain=3):
     return [generate_domain(word_list, tld, words_per_domain) for _ in xrange(domain_count)]
 
 
+def _must_get_params():
+    if len(sys.argv) == 3:
+        tld = sys.argv[1]
+        domain_count = int(sys.argv[2])
+    elif "DGA_DOMAIN_COUNT" in os.environ and "DGA_TLD" in os.environ:
+        tld = os.environ["DGA_TLD"]
+        domain_count = int(os.environ["DGA_DOMAIN_COUNT"])
+    else:
+        "Usage: python dga.py <TLD> <domain_count>"
+        sys.exit(0)
+
+    if tld[0] != '.':
+        tld = '.' + tld
+
+    return tld, domain_count, get_default_word_list()
+
+
 def main(tld, domain_count, word_list):
     generated = generate_domains(word_list, tld, domain_count)
 
@@ -39,21 +56,5 @@ if __name__ == '__main__':
     import sys
     import os
 
-    if len(sys.argv) == 3:
-        tld = sys.argv[1]
-        if tld[0] != '.':
-            tld = '.' + tld
-
-        domain_count = int(sys.argv[2])
-
-        main(tld, domain_count, get_default_word_list())
-
-    elif "DGA_DOMAIN_COUNT" in os.environ and "DGA_TLD" in os.environ:
-        tld = os.environ["DGA_TLD"]
-        if tld[0] != '.':
-            tld = '.' + tld
-        domain_count = int(os.environ["DGA_DOMAIN_COUNT"])
-        main(tld, domain_count, get_default_word_list())
-
-    else:
-        print "Usage: python dga.py <TLD> <domain_count>"
+    tld, domain_count, word_list = _must_get_params()
+    main(tld, domain_count, word_list)
